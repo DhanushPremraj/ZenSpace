@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>ZenSpace | Productivity Hub</title>
+
+    <meta name="description" content="ZenSpace — a premium productivity dashboard with Pomodoro timer, Kanban board, habit and mood tracking. Built with HTML, CSS and vanilla JavaScript.">
+
+    <!-- Inline SVG favicon avoids a 404 request for favicon.ico -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%234f8cff'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial' font-weight='700' fill='white' text-anchor='middle'%3EZ%3C/text%3E%3C/svg%3E">
+
+    <link
+        rel="stylesheet"
+        href="style.css">
+
+</head>
+
+<body>
+
+    <!-- =========================
+         LOADING SCREEN
+    ========================== -->
+
+    <div
+        id="loader">
+
+        <div class="loader-content">
+
+            <div class="spinner"></div>
+
+            <h1>ZenSpace</h1>
+
+            <p>Preparing your workspace...</p>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+            MAIN APP
+    ========================== -->
+
+    <div
+        class="app">
+
+        <!-- =========================
+                SIDEBAR
+        ========================== -->
+
+        <button id="sidebarToggle" class="sidebar-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <aside
+            class="sidebar"
+            id="sidebar">
+
+            <div class="logo">
+
+                <h1>
+
+                    Zen<span>Space</span>
+
+                </h1>
+
+            </div>
+
+            <nav>
+
+                <a href="#dashboard" class="nav-link active" data-section="dashboard">
+
+                    <span class="nav-icon">🏠</span> Dashboard
+
+                </a>
+
+                <a href="#kanban" class="nav-link" data-section="kanban">
+
+                    <span class="nav-icon">🗂️</span> Kanban
+
+                </a>
+
+                <a href="#pomodoro" class="nav-link" data-section="pomodoro">
+
+                    <span class="nav-icon">🍅</span> Pomodoro
+
+                </a>
+
+                <a href="#habits" class="nav-link" data-section="habits">
+
+                    <span class="nav-icon">✅</span> Habits
+
+                </a>
+
+                <a href="#mood" class="nav-link" data-section="mood">
+
+                    <span class="nav-icon">😊</span> Mood
+
+                </a>
+
+                <a href="#settings" class="nav-link" data-section="settings">
+
+                    <span class="nav-icon">⚙️</span> Settings
+
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>Focus streak</p>
+                <h2 id="sidebarStreak">0 days</h2>
+            </div>
+
+        </aside>
+
+        <!-- =========================
+            CONTENT
+        ========================== -->
+
+        <main
+            class="content">
+
+            <!-- =========================
+                    HEADER
+            ========================== -->
+
+            <header
+                class="topbar">
+
+                <div>
+
+                    <h2
+                        id="greeting">
+
+                        Good Morning
+
+                    </h2>
+
+                    <p
+                        id="todayDate">
+
+                        Monday, 1 January 2026
+
+                    </p>
+
+                </div>
+
+                <div
+                    class="top-actions">
+
+                    <div class="search-wrap">
+                        <span class="search-icon">🔍</span>
+                        <input
+                            id="searchInput"
+                            type="text"
+                            placeholder="Search tasks...">
+                    </div>
+
+                    <button
+                        id="themeToggle"
+                        aria-label="Toggle dark or light theme">
+
+                        🌙
+
+                    </button>
+
+                </div>
+
+            </header>
+
+            <!-- =========================
+               DASHBOARD STATS
+            ========================== -->
+
+            <section
+                id="dashboard"
+                class="stats-grid reveal">
+                <!-- Card 1 -->
+<div class="stat-card">
+
+    <div class="stat-icon">
+        📋
+    </div>
+
+    <div class="stat-info">
+
+        <h3>Total Tasks</h3>
+
+        <h2 id="totalTasks">
+            0
+        </h2>
+
+    </div>
+
+</div>
+
+<!-- Card 2 -->
+<div class="stat-card">
+
+    <div class="stat-icon">
+        ✅
+    </div>
+
+    <div class="stat-info">
+
+        <h3>Completed</h3>
+
+        <h2 id="completedTasks">
+            0
+        </h2>
+
+    </div>
+
+</div>
+
+<!-- Card 3 -->
+<div class="stat-card">
+
+    <div class="stat-icon">
+        🍅
+    </div>
+
+    <div class="stat-info">
+
+        <h3>Focus Time</h3>
+
+        <h2 id="focusMinutes">
+            0 min
+        </h2>
+
+    </div>
+
+</div>
+
+<!-- Card 4 -->
+<div class="stat-card">
+
+    <div class="stat-icon">
+        📈
+    </div>
+
+    <div class="stat-info">
+
+        <h3>Productivity</h3>
+
+        <h2 id="productivityScore">
+            0%
+        </h2>
+
+    </div>
+
+</div>
+
+</section>
+<!-- =========================
+        POMODORO
+========================== -->
+
+<section
+    id="pomodoro"
+    class="pomodoro-section reveal">
+
+    <div class="pomodoro-card">
+
+        <div class="section-title">
+
+            <h2>
+                🍅 Pomodoro Timer
+            </h2>
+
+            <p>
+                Stay focused. Take breaks.
+            </p>
+
+        </div>
+
+        <div
+            id="timerDisplay"
+            class="timer-display">
+
+            25:00
+
+        </div>
+
+        <div
+            id="timerStatus"
+            class="timer-status">
+
+            Focus Session
+
+        </div>
+
+        <div
+            class="timer-controls">
+
+            <button
+                id="startBtn">
+
+                Start
+
+            </button>
+
+            <button
+                id="pauseBtn">
+
+                Pause
+
+            </button>
+
+            <button
+                id="resetBtn">
+
+                Reset
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- =========================
+     PRODUCTIVITY PANEL
+========================= -->
+
+<section class="productivity-panel reveal">
+
+    <div class="quote-card">
+
+        <div class="section-title">
+
+            <h2>
+                💡 Daily Inspiration
+            </h2>
+
+        </div>
+
+        <blockquote id="dailyQuote">
+
+            "Small progress every day adds up to big results."
+
+        </blockquote>
+
+    </div>
+
+    <div class="progress-card">
+
+        <div class="section-title">
+
+            <h2>
+
+                🔥 Focus Streak
+
+            </h2>
+
+        </div>
+
+        <div class="streak-number"
+             id="streakCount">
+
+            0
+
+        </div>
+
+        <p>
+
+            Keep completing Pomodoro sessions
+            to increase your streak.
+
+        </p>
+
+    </div>
+
+</section>
+<!-- =========================
+        KANBAN BOARD
+========================= -->
+
+<section id="kanban" class="kanban-section reveal">
+
+    <div class="section-header">
+
+        <div>
+
+            <h2>📋 Kanban Board</h2>
+
+            <p>
+                Organize your workflow efficiently.
+            </p>
+
+        </div>
+
+        <button id="openTaskModal" class="primary-btn">
+
+            + New Task
+
+        </button>
+
+    </div>
+
+    <div class="kanban-board">
+
+        <!-- TO DO -->
+
+        <div
+            class="kanban-column"
+            data-column="todo">
+
+            <div class="column-header">
+
+                <h3>To Do</h3>
+
+                <span id="todoCount">
+
+                    0
+
+                </span>
+
+            </div>
+
+            <div
+                id="todoList"
+                class="task-list">
+
+            </div>
+
+        </div>
+
+        <!-- IN PROGRESS -->
+
+        <div
+            class="kanban-column"
+            data-column="progress">
+
+            <div class="column-header">
+
+                <h3>In Progress</h3>
+
+                <span id="progressCount">
+
+                    0
+
+                </span>
+
+            </div>
+
+            <div
+                id="progressList"
+                class="task-list">
+
+            </div>
+
+        </div>
+
+        <!-- COMPLETED -->
+
+        <div
+            class="kanban-column"
+            data-column="completed">
+
+            <div class="column-header">
+
+                <h3>Completed</h3>
+
+                <span id="completedCount">
+
+                    0
+
+                </span>
+
+            </div>
+
+            <div
+                id="completedList"
+                class="task-list">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- =========================
+        HABITS & MOOD
+========================= -->
+
+<section class="bottom-grid reveal">
+
+    <!-- HABIT TRACKER -->
+
+    <div
+        id="habits"
+        class="glass-card">
+
+        <div class="section-header">
+
+            <h2>
+                ✅ Daily Habits
+            </h2>
+
+        </div>
+
+        <div class="habit-list">
+
+            <label class="habit-item">
+
+                <input
+                    type="checkbox"
+                    data-habit="water">
+
+                <span>Drink Water</span>
+
+            </label>
+
+            <label class="habit-item">
+
+                <input
+                    type="checkbox"
+                    data-habit="exercise">
+
+                <span>Exercise</span>
+
+            </label>
+
+            <label class="habit-item">
+
+                <input
+                    type="checkbox"
+                    data-habit="study">
+
+                <span>Study</span>
+
+            </label>
+
+            <label class="habit-item">
+
+                <input
+                    type="checkbox"
+                    data-habit="reading">
+
+                <span>Read 30 Minutes</span>
+
+            </label>
+
+            <label class="habit-item">
+
+                <input
+                    type="checkbox"
+                    data-habit="sleep">
+
+                <span>Sleep 8 Hours</span>
+
+            </label>
+
+            <label class="habit-item">
+
+                <input
+                    type="checkbox"
+                    data-habit="meditation">
+
+                <span>Meditate</span>
+
+            </label>
+
+        </div>
+
+    </div>
+
+    <!-- MOOD TRACKER -->
+
+    <div
+        id="mood"
+        class="glass-card">
+
+        <div class="section-header">
+
+            <h2>
+                😊 Mood Tracker
+            </h2>
+
+        </div>
+
+        <p>
+
+            How are you feeling today?
+
+        </p>
+
+        <div class="mood-container">
+
+            <button
+                class="mood-btn"
+                data-mood="excellent"
+                aria-label="Excellent">
+
+                🤩
+
+            </button>
+
+            <button
+                class="mood-btn"
+                data-mood="happy"
+                aria-label="Happy">
+
+                😊
+
+            </button>
+
+            <button
+                class="mood-btn"
+                data-mood="normal"
+                aria-label="Normal">
+
+                😐
+
+            </button>
+
+            <button
+                class="mood-btn"
+                data-mood="sad"
+                aria-label="Sad">
+
+                😔
+
+            </button>
+
+            <button
+                class="mood-btn"
+                data-mood="tired"
+                aria-label="Tired">
+
+                😴
+
+            </button>
+
+        </div>
+
+        <p
+            id="selectedMood">
+
+            No mood selected
+
+        </p>
+
+    </div>
+
+</section>
+<!-- =========================
+        SETTINGS
+========================= -->
+
+<section
+    id="settings"
+    class="glass-card settings-section reveal">
+
+    <div class="section-header">
+
+        <h2>⚙ Settings</h2>
+
+    </div>
+
+    <div class="settings-buttons">
+
+        <button id="exportData" class="secondary-btn">
+
+            ⬇ Export Data
+
+        </button>
+
+        <button id="importData" class="secondary-btn">
+
+            ⬆ Import Data
+
+        </button>
+
+        <button id="clearData" class="danger-btn">
+
+            🗑 Clear All Data
+
+        </button>
+
+        <input
+            type="file"
+            id="importFile"
+            accept=".json"
+            hidden>
+
+    </div>
+
+</section>
+
+<!-- =========================
+        FOOTER
+========================= -->
+
+<footer class="footer">
+
+    <p>
+
+        ZenSpace Productivity Hub © 2026
+
+    </p>
+
+</footer>
+
+</main>
+
+</div>
+
+<!-- =========================
+        TASK MODAL
+========================= -->
+
+<div
+    id="taskModal"
+    class="modal">
+
+    <div class="modal-content">
+
+        <button
+            id="closeModal"
+            class="close-btn"
+            aria-label="Close dialog">
+
+            ×
+
+        </button>
+
+        <h2>
+
+            Create New Task
+
+        </h2>
+
+        <form id="taskForm" novalidate>
+
+            <div class="form-group">
+
+                <label for="taskTitle">
+
+                    Task Title
+
+                </label>
+
+                <input
+                    id="taskTitle"
+                    type="text"
+                    maxlength="50"
+                    autocomplete="off">
+
+                <span class="field-error" id="titleError"></span>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="taskDescription">
+
+                    Description
+
+                </label>
+
+                <textarea
+                    id="taskDescription"
+                    rows="4"
+                    maxlength="200"></textarea>
+
+                <span class="field-error" id="descriptionError"></span>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="taskPriority">
+
+                    Priority
+
+                </label>
+
+                <select id="taskPriority">
+
+                    <option value="High">
+
+                        High
+
+                    </option>
+
+                    <option value="Medium" selected>
+
+                        Medium
+
+                    </option>
+
+                    <option value="Low">
+
+                        Low
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="taskDueDate">
+
+                    Due Date
+
+                </label>
+
+                <input
+                    id="taskDueDate"
+                    type="date">
+
+                <span class="field-error" id="dueDateError"></span>
+
+            </div>
+
+            <p
+                id="formError"
+                class="form-error">
+
+            </p>
+
+            <button
+                type="submit"
+                class="primary-btn">
+
+                Save Task
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- =========================
+        TOAST
+========================= -->
+
+<div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite">
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
